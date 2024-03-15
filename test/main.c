@@ -45,6 +45,12 @@ static int	_memcmp(const void *s1, const void *s2, size_t l)
 		return *m1 - *m2;
 	return 0;
 }
+
+static unsigned char _asc(int a, int b)
+{
+	return a > b;
+}
+
 __attribute__((unused)) static char	test1()
 {
 	const size_t size = 5;
@@ -61,7 +67,7 @@ __attribute__((unused)) static char	test1()
 		++i;
 	}
 
-	actual = my_mergesort(arr, size);
+	actual = my_mergesort(arr, size, _asc);
 	if (!actual)
 		 return KO;
 	if (_memcmp(expected, actual, size) != 0)
@@ -96,7 +102,7 @@ __attribute__((unused)) static char	test2()
 	arr[2] = 5;
 	arr[3] = 1;
 	arr[4] = 0;
-	actual = my_mergesort(arr, size);
+	actual = my_mergesort(arr, size, _asc);
 	if (actual == 0)
 		 return KO;
 	if (_memcmp(expected, actual, size) != 0)
@@ -123,7 +129,7 @@ __attribute__((unused)) static char	test3()
 
 	expected[0] = 1;
 	arr[0] = 1;
-	actual = my_mergesort(arr, size);
+	actual = my_mergesort(arr, size, _asc);
 	if (actual == 0)
 		 return KO;
 	if (_memcmp(expected, actual, size) != 0)
@@ -155,7 +161,7 @@ __attribute__((unused)) static char	test4()
 		arr[i] = size - i - 1;
 		++i;
 	}
-	actual = my_mergesort(arr, size);
+	actual = my_mergesort(arr, size, _asc);
 	if (actual == 0)
 		 return KO;
 	if (_memcmp(expected, actual, size) != 0)
@@ -188,7 +194,7 @@ __attribute__((unused)) static char	test5()
 		++i;
 	}
 
-	actual = my_mergesort(arr, size);
+	actual = my_mergesort(arr, size, _asc);
 	if (actual == 0)
 		 return KO;
 	if (_memcmp(expected, actual, size) != 0)
@@ -222,7 +228,7 @@ __attribute__((unused)) static char	test6()
 		++i;
 	}
 
-	actual = my_mergesort(arr, size);
+	actual = my_mergesort(arr, size, _asc);
 	if (actual == 0)
 		 return KO;
 	if (_memcmp(expected, actual, size) != 0)
