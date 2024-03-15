@@ -33,7 +33,7 @@ static unsigned int	_getSemiSize(int size)
 	return size % 2 + size / 2;
 }
 
-static void	_merge(int *arr, int size)
+static void	_merge(int *arr, int size, mergesort_callback cb)
 {
 	const int		*breakPointer;
 	int const		tmp[size];
@@ -53,15 +53,15 @@ static void	_merge(int *arr, int size)
 			*arr = *(secondSubArrayPointer++);
 		else if (secondSubArrayPointer > &(tmp[size]))
 			*arr = *(firstSubArrayPointer++);
-		else if (*firstSubArrayPointer > *secondSubArrayPointer)
+		else if (cb(*firstSubArrayPointer, *secondSubArrayPointer))
 			*arr = *(secondSubArrayPointer++);
-		else if (*firstSubArrayPointer <= *secondSubArrayPointer)
+		else if (!cb(*firstSubArrayPointer, *secondSubArrayPointer))
 			*arr = *(firstSubArrayPointer++);
 		++arr;
 	}
 }
 
-static void	_sort(int *src, int *dst, size_t size)
+static void	_sort(int *src, int *dst, size_t size, mergesort_callback cb)
 {
 	unsigned int	firstSubArraySize;
 	unsigned int	secondSubArraySize;
@@ -69,25 +69,25 @@ static void	_sort(int *src, int *dst, size_t size)
 	if (size <= 2)
 	{
 		_memcpy(src, dst, size);
-		if (size > 1 &&  *dst > *(dst + 1))
+		if (size > 1 &&  cb(*dst, *(dst + 1)))
 			_swap(dst);
 		return;
 	}
 	firstSubArraySize = _getSemiSize(size);
 	secondSubArraySize = size / 2;
-	_sort(src, dst, firstSubArraySize);
-	_sort(src + firstSubArraySize, dst + firstSubArraySize, secondSubArraySize);
-	_merge(dst, size);
+	_sort(src, dst, firstSubArraySize, cb);
+	_sort(src + firstSubArraySize, dst + firstSubArraySize, secondSubArraySize, cb);
+	_merge(dst, size, cb);
 }
 
-int 		*my_mergesort(int *arr, size_t size)
+int 		*my_mergesort(int *arr, size_t size, mergesort_callback cb)
 {
 	int	*res;
 
 	if ((res = (int*)malloc((sizeof (int)) * size)) == NULL)
 		return NULL;
 	_bzero(res, size);
-	_sort(arr, res, size);
+	_sort(arr, res, size, cb);
 	
 	return res;
 }
