@@ -8,6 +8,6 @@ WORKDIR	/app
 
 COPY . .
 
-RUN make && make test
+RUN make && make test debug=1
 
 CMD ["valgrind", "./test.run"]

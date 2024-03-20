@@ -253,6 +253,5 @@ int main(void)
 	
 	setbuf(stdout, NULL);
 	res = test1() | test2() | test3() | test4() | test5() | test6();
-	// res = test2();
 	return res;
 }
